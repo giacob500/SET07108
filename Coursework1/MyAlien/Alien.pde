@@ -5,7 +5,8 @@ class Alien {
   int bodyHeight;
   int bodyXLoc;
   int bodyYLoc;
-  int bodyColor[] = {(int)random(75, 255), (int)random(75, 255), (int)random(75, 255)};
+  // Array made of 3 integers used to define a RGB color
+  int bodyColor[] = {(int)random(50, 255), (int)random(50, 255), (int)random(50, 255)};
 
   int headWidth;
   int headHeight;
@@ -14,14 +15,14 @@ class Alien {
 
   int moveXBy = 2;
   int moveYBy = 1;
-  
+
 
   Alien() {
     bodyWidth = 75;
     bodyHeight = 100;
     bodyXLoc = 200;
     bodyYLoc = 200;
-  }//end constructor  
+  }
 
   Alien(int bWidth, int bHeight, int startX, int startY) {
     bodyWidth = bWidth;
@@ -31,22 +32,25 @@ class Alien {
   }  
 
   void drawBody() {
+    // Draws antennae
     stroke(bodyColor[0], bodyColor[1], bodyColor[2]);
     line(bodyXLoc, bodyYLoc, (bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 2));
     line(bodyXLoc, bodyYLoc, (bodyXLoc - (bodyWidth / 2)), (bodyYLoc - bodyHeight / 2));
-    stroke(0);
-    println(bodyColor[0]+ " "+ bodyColor[1] + " "+ bodyColor[2]);
+    stroke(0);    
     fill(bodyColor[0], bodyColor[1], bodyColor[2]);
-    ellipse(bodyXLoc, bodyYLoc, bodyWidth, bodyHeight);
     ellipse(bodyXLoc + bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8);
     ellipse(bodyXLoc - bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8); 
-}
+    // Draws body
+    ellipse(bodyXLoc, bodyYLoc, bodyWidth, bodyHeight);
+  }
 
-  void drawFace() {   
+  void drawFace() {
+    // Calls others subfunctions
     drawEyes();
     drawMouth();
   }
 
+  // Draws eyes
   void drawEyes() {
     fill(0);
     headWidth = bodyWidth / 4;  
@@ -58,25 +62,18 @@ class Alien {
     ellipse(headXloc, headYloc, headWidth, headHeight);
   } 
 
+  // Draws mouth
   void drawMouth() {
-    fill(255,0,255);
+    fill(255, 0, 255);
     headWidth = bodyWidth / 3;  
     headHeight = bodyHeight / 10;    
     headYloc = bodyYLoc + (bodyHeight / 4);
     headXloc = bodyXLoc; 
     ellipse(headXloc, headYloc, headWidth, headHeight);
-    
-    /* To draw curves:
-    noFill();
-    stroke(255, 102, 0);
-    curve(5, 26, 5, 26, 73, 24, 73, 61);
-    stroke(0); 
-    curve(5, 26, 73, 24, 73, 61, 15, 65); 
-    stroke(255, 102, 0);
-    curve(73, 24, 73, 61, 15, 65, 15, 65);*/
-  } 
+  }
 
   void checkForBounce() {
+    // If one of the lateral edges is hit change speed and direction
     if (bodyXLoc >= (width -(bodyWidth / 2))) {
       moveXBy = (int)random(2, 4);
       moveXBy = moveXBy * -1;
@@ -94,11 +91,8 @@ class Alien {
   } 
 
   void move() {
+    // Increase locaiton value to give movement effect
     bodyXLoc = bodyXLoc + moveXBy;
     bodyYLoc = bodyYLoc + moveYBy;
-    //bodyXLoc = bodyXLoc + random(0, 255);
-    //bodyYLoc = bodyYLoc + random(0, 255);
   }
 }
-
-//end class Alien  
