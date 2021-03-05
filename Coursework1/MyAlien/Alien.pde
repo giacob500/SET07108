@@ -6,6 +6,7 @@ class Alien {
   int bodyXLoc;
   int bodyYLoc;
   // Array made of 3 integers used to define a RGB color
+  //random values doesn't start from 0 to exclude too dark color   
   int bodyColor[] = {(int)random(50, 255), (int)random(50, 255), (int)random(50, 255)};
 
   int headWidth;
@@ -16,7 +17,7 @@ class Alien {
   int moveXBy = 2;
   int moveYBy = 1;
 
-
+  // Constructors
   Alien() {
     bodyWidth = 75;
     bodyHeight = 100;
@@ -31,11 +32,12 @@ class Alien {
     bodyYLoc = startY;
   }  
 
-  void drawBody() {
-    // Draws antennae
+  // Draws body using goniometry for antennas
+  void drawBody() {    
     stroke(bodyColor[0], bodyColor[1], bodyColor[2]);
-    line(bodyXLoc, bodyYLoc, (bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 2));
-    line(bodyXLoc, bodyYLoc, (bodyXLoc - (bodyWidth / 2)), (bodyYLoc - bodyHeight / 2));
+    noFill();
+    arc((bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI, PI+HALF_PI);
+    arc((bodyXLoc - (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI+HALF_PI, TAU);
     stroke(0);    
     fill(bodyColor[0], bodyColor[1], bodyColor[2]);
     ellipse(bodyXLoc + bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8);
@@ -44,14 +46,14 @@ class Alien {
     ellipse(bodyXLoc, bodyYLoc, bodyWidth, bodyHeight);
   }
 
+  // Draws face using subfunctions
   void drawFace() {
-    // Calls others subfunctions
     drawEyes();
     drawMouth();
   }
 
   // Draws eyes
-  void drawEyes() {
+  private void drawEyes() {
     fill(0);
     headWidth = bodyWidth / 4;  
     headHeight = bodyHeight / 3;    
@@ -63,7 +65,7 @@ class Alien {
   } 
 
   // Draws mouth
-  void drawMouth() {
+  private void drawMouth() {
     fill(255, 0, 255);
     headWidth = bodyWidth / 3;  
     headHeight = bodyHeight / 10;    
@@ -90,8 +92,8 @@ class Alien {
     }
   } 
 
+  // Increase locaiton value to give movement effect
   void move() {
-    // Increase locaiton value to give movement effect
     bodyXLoc = bodyXLoc + moveXBy;
     bodyYLoc = bodyYLoc + moveYBy;
   }
