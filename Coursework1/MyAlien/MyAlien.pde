@@ -30,12 +30,12 @@ void draw() {
   fill(255);
   // Specifies stroke thickness in pixels
   strokeWeight(2); 
-  // Draws stars using coordinates array
+  // Creates stars using coordinates array
   stroke(255);
   for (int i = 0; i < 100; i++) {
     point(stars[i][0], stars[i][1]);
   }
-
+  
   // Calling Alien functions to show aliens on screen
   mrAlien.drawBody();
   mrAlien.drawFace();
