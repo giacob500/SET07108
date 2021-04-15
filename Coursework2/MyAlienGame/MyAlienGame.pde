@@ -1,20 +1,21 @@
+PImage bg;
+
 // Variables declaration
 Alien mrAlien;
-Alien mrsAlien;
-Alien babyAlien;
+Score score;
+Enemy enemy1; 
 int element = 0;
 float bgCounter = 1;
 float valueCompare = 1;
 int[][] stars = new int[100][2];
 
-PImage bg;
-
-
 void setup() {
   size(800, 800);
   //bg = loadImage("./images/ingame-background/bg (" + bgCounter + ").gif");
   // Inizialization of objects "Alien"
-  mrAlien = new Alien(175, 200, 400, 650);
+  mrAlien = new Alien(175, 200, 400, 690);  
+  enemy1 = new Enemy(mrAlien.bodyWidth, mrAlien.bodyHeight, width / 2, height / 2 - height / 6);
+  score = new Score();
   /*
   // Loop to populate the array with random coordinates
    for (int i = 0; i < 100; i++) {
@@ -54,6 +55,9 @@ void draw() {
   // Calling Alien functions to show aliens on screen
   mrAlien.drawBody();
   mrAlien.drawFace();
+  enemy1.drawBody();
+  score.display();  
+  enemy1.move();
   //mrAlien.checkForBounce();
   //mrAlien.move();
 }

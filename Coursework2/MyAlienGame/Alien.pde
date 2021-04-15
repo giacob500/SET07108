@@ -45,6 +45,8 @@ class Alien {
     ellipse(bodyXLoc - bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8); 
     // Draws body
     ellipse(bodyXLoc, bodyYLoc, bodyWidth, bodyHeight);
+    fill(155);
+    rect(bodyXLoc-25, bodyYLoc-155, 50, 155);
   }
 
   // Draws face using subfunctions
@@ -104,26 +106,32 @@ class Alien {
   void move() {    
     if (key == CODED) {
       if (keyCode == LEFT) {
+        /*
         if (moveXBy > 10) {
           moveXBy += bodyXTrueLoc * 0.005;
           bodyXLoc = bodyXLoc - moveXBy;
           bodyXTrueLoc -= 400 - bodyXLoc;
           print(moveXBy + " " + bodyXLoc + " " + bodyXTrueLoc + "\n");
         }
+        */
+        if(bodyXLoc > 0 + bodyWidth/2)
+        bodyXLoc = bodyXLoc - moveXBy;
       } else if (keyCode == RIGHT) {
+        /*
         if (moveXBy > 10) {
           moveXBy -= bodyXTrueLoc * 0.005;
           bodyXLoc = bodyXLoc + moveXBy;
           bodyXTrueLoc -= 400 - bodyXLoc;
           print(moveXBy + " " + bodyXLoc + " " + bodyXTrueLoc + "\n");
         }
-        /*
+        
         moveXBy += 0.05;
         bodyXLoc = bodyXLoc + moveXBy;
         -------------------
-        moveXBy = 30;
-         bodyXLoc = bodyXLoc + moveXBy;
-         */
+        */
+        if(bodyXLoc < width - bodyWidth/2)          
+        bodyXLoc = bodyXLoc + moveXBy;
+         
       }
       /*
       else if (keyCode == DOWN) {
