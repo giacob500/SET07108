@@ -20,21 +20,22 @@ class Alien {
 
   // Constructors
   Alien() {
-    bodyWidth = 75;
-    bodyHeight = 100;
-    bodyXLoc = 400;
-    bodyYLoc = 650;
+    this.bodyWidth = 75;
+    this.bodyHeight = 100;
+    this.bodyXLoc = 400;
+    this.bodyYLoc = 650;
   }
 
   Alien(int bWidth, int bHeight, int startX, int startY) {
-    bodyWidth = bWidth;
-    bodyHeight = bHeight;
-    bodyXLoc = startX;
-    bodyYLoc = startY;
+    this.bodyWidth = bWidth;
+    this.bodyHeight = bHeight;
+    this.bodyXLoc = startX;
+    this.bodyYLoc = startY;
   }  
 
   // Draws body using goniometry for antennas
-  void drawBody() {    
+  void drawBody() {
+    spawnSpaceship();
     stroke(bodyColor[0], bodyColor[1], bodyColor[2]);
     noFill();
     arc((bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI, PI+HALF_PI);
@@ -45,8 +46,6 @@ class Alien {
     ellipse(bodyXLoc - bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8); 
     // Draws body
     ellipse(bodyXLoc, bodyYLoc, bodyWidth, bodyHeight);
-    fill(155);
-    rect(bodyXLoc-25, bodyYLoc-155, 50, 155);
   }
 
   // Draws face using subfunctions
@@ -103,45 +102,28 @@ class Alien {
    }
    */
 
+  void spawnSpaceship() {
+    img = loadImage("./images/spaceship_1_centered.png");
+    //image(img, width / 2 - 244, bodyYLoc - bodyHeight / 2);
+    imageMode(CENTER);
+    image(img, bodyXLoc, bodyYLoc, bodyHeight*2, bodyWidth*2.5);
+  } 
+
   void move() {    
     if (key == CODED) {
       if (keyCode == LEFT) {
-        /*
-        if (moveXBy > 10) {
-          moveXBy += bodyXTrueLoc * 0.005;
+        if (bodyXLoc > bodyWidth/2)
           bodyXLoc = bodyXLoc - moveXBy;
-          bodyXTrueLoc -= 400 - bodyXLoc;
-          print(moveXBy + " " + bodyXLoc + " " + bodyXTrueLoc + "\n");
-        }
-        */
-        if(bodyXLoc > 0 + bodyWidth/2)
-        bodyXLoc = bodyXLoc - moveXBy;
       } else if (keyCode == RIGHT) {
-        /*
-        if (moveXBy > 10) {
-          moveXBy -= bodyXTrueLoc * 0.005;
+        if (bodyXLoc < width - bodyWidth/2)          
           bodyXLoc = bodyXLoc + moveXBy;
-          bodyXTrueLoc -= 400 - bodyXLoc;
-          print(moveXBy + " " + bodyXLoc + " " + bodyXTrueLoc + "\n");
-        }
-        
-        moveXBy += 0.05;
-        bodyXLoc = bodyXLoc + moveXBy;
-        -------------------
-        */
-        if(bodyXLoc < width - bodyWidth/2)          
-        bodyXLoc = bodyXLoc + moveXBy;
-         
+      } else if (keyCode == UP) {
+        if (bodyYLoc > height/2 + bodyHeight/2)        
+          bodyYLoc = bodyYLoc - moveXBy;
+      } else if (keyCode == DOWN) {
+        if (bodyYLoc < height - bodyHeight)       
+          bodyYLoc = bodyYLoc + moveXBy;
       }
-      /*
-      else if (keyCode == DOWN) {
-       moveYBy += 0.03 * bodyYLoc;
-       bodyYLoc = bodyYLoc + moveYBy;
-       }else if (keyCode == UP) {
-       moveYBy += 0.03 * bodyYLoc;
-       bodyYLoc = bodyYLoc - moveYBy;
-       }
-       */
     }
   }
 }
