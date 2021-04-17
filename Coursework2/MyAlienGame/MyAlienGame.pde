@@ -1,6 +1,8 @@
 PImage bg;
 
 // Variables declaration
+String gameState;
+Button resetButton;
 Alien mrAlien;
 Spaceship spaceship;
 Enemy enemy1;
@@ -12,17 +14,47 @@ float valueCompare = 1;
 void setup() {
   frameRate(40);
   size(800, 800);
-  // Inizialization of objects "Alien"
+  gameState = "START";
+  // Inizialization of "Alien" object
   mrAlien = new Alien(100, 115, 400, 690);
   enemy1 = new Enemy(mrAlien.bodyWidth, mrAlien.bodyHeight, width / 2, height / 2 - height / 6);
   score = new Score();
 }
 
 void draw() {
+  //clearBackground();
+  if (gameState == "START") {
+    startGame();
+  } else if (gameState == "PLAY") {
+    playGame();
+  } else if (gameState == "WIN") {
+    winGame();
+  } else if (gameState == "LOSE") {
+    loseGame();
+  }
+}
+
+void keyPressed() {
+  mrAlien.move();
+}
+
+void startGame() {
+  // Put menu here
+  /*
+  if(resetButton.isClicked()){
+      gameState = "WIN";
+    }
+    resetButton.update();
+    resetButton.render();
+    */
+  gameState = "PLAY";
+}
+
+void playGame() {
   // to save program performance
   if (valueCompare == (int)bgCounter) {
     bg = loadImage("./images/ingame-background/bg (" + (int)bgCounter + ").gif");
-  }  
+  }
   background(bg);
   if (bgCounter < 61)
     bgCounter+= 0.5;
@@ -36,7 +68,7 @@ void draw() {
   enemy1.move(mrAlien.bodyWidth, mrAlien.bodyHeight);
   score.display();
 }
-
-void keyPressed() {
-  mrAlien.move();
+void winGame() {
+}
+void loseGame() {
 }
