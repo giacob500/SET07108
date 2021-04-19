@@ -109,21 +109,35 @@ class Alien {
     image(img, bodyXLoc, bodyYLoc, bodyHeight*2, bodyWidth*2.5);
   } 
 
-  void move() {    
-    if (key == CODED) {
-      if (keyCode == LEFT) {
-        if (bodyXLoc > bodyWidth/2)
-          bodyXLoc = bodyXLoc - moveXBy;
-      } else if (keyCode == RIGHT) {
-        if (bodyXLoc < width - bodyWidth/2)          
-          bodyXLoc = bodyXLoc + moveXBy;
-      } else if (keyCode == UP) {
-        if (bodyYLoc > height/2 + bodyHeight/2)        
-          bodyYLoc = bodyYLoc - moveXBy;
-      } else if (keyCode == DOWN) {
-        if (bodyYLoc < height - bodyHeight)       
-          bodyYLoc = bodyYLoc + moveXBy;
+  void move(String controls) {
+    if (controls == "keyboard") {
+      if (key == CODED) {
+        if (keyCode == LEFT) {
+          if (bodyXLoc > bodyWidth/2)
+            bodyXLoc = bodyXLoc - moveXBy;
+        } else if (keyCode == RIGHT) {
+          if (bodyXLoc < width - bodyWidth/2)          
+            bodyXLoc = bodyXLoc + moveXBy;
+        } else if (keyCode == UP) {
+          if (bodyYLoc > height/2 + bodyHeight/2)        
+            bodyYLoc = bodyYLoc - moveXBy;
+        } else if (keyCode == DOWN) {
+          if (bodyYLoc < height - bodyHeight)       
+            bodyYLoc = bodyYLoc + moveXBy;
+        }
       }
+    } else if (controls == "mouse") {
+      noCursor();
+      bodyXLoc = mouseX;
+      if(mouseY > height/2){
+        bodyYLoc = mouseY;
+      }          
+      /*
+      if(mousePressed){
+        bodyXLoc = mouseX;
+        bodyYLoc = mouseY;
+      }
+      */
     }
   }
 }

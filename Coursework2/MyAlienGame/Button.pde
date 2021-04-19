@@ -24,8 +24,7 @@ class Button {
       }
     } else {
       clicked = false;
-    }
-    
+    }    
     if(mousePressed != true){
       pressed = false;
     }
@@ -33,10 +32,17 @@ class Button {
 
   // To render button to the screen
   void render() {
-    fill(colour);
+    if(mouseX >= pos.x && mouseX <= pos.x+buttonWidth && mouseY >= pos.y && mouseY <= pos.y + buttonHeight){
+      fill(colour-150);
+      cursor(HAND);
+    }else{
+      fill(colour);
+      cursor(ARROW);
+    }  
+    rectMode(CORNER);
     rect(pos.x, pos.y, buttonWidth, buttonHeight); 
-
     fill(0);
+    textSize(buttonHeight/3);
     textAlign(CENTER, CENTER);
     text(text, pos.x + (buttonWidth / 2), pos.y + (buttonHeight / 2));
   }

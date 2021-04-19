@@ -15,7 +15,7 @@ class Enemy {
   int moveXBy = 2;
 
   float scale = 1;
-  float speed = 1.0025;
+  float speed = 1.005;
 
   // Constructors
   Enemy() {
