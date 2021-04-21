@@ -74,6 +74,9 @@ class Enemy {
     ellipse(headXloc, headYloc, headWidth, headHeight);
   }
 
+  void collision(){
+  }
+
   void move(int alienBodyWidth, int alienBodyHeight) {
     /*
     // Draws body

@@ -35,9 +35,11 @@ class Button {
     if(mouseX >= pos.x && mouseX <= pos.x+buttonWidth && mouseY >= pos.y && mouseY <= pos.y + buttonHeight){
       fill(colour-150);
       cursor(HAND);
+      strokeWeight(2);
     }else{
       fill(colour);
       cursor(ARROW);
+      strokeWeight(1);
     }  
     rectMode(CORNER);
     rect(pos.x, pos.y, buttonWidth, buttonHeight); 

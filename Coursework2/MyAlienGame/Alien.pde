@@ -36,6 +36,7 @@ class Alien {
   // Draws body using goniometry for antennas
   void drawBody() {
     spawnSpaceship();
+    strokeWeight(1);
     stroke(bodyColor[0], bodyColor[1], bodyColor[2]);
     noFill();
     arc((bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI, PI+HALF_PI);
@@ -107,7 +108,10 @@ class Alien {
     //image(img, width / 2 - 244, bodyYLoc - bodyHeight / 2);
     imageMode(CENTER);
     image(img, bodyXLoc, bodyYLoc, bodyHeight*2, bodyWidth*2.5);
-  } 
+  }
+  
+  void collision(){
+  }
 
   void move(String controls) {
     if (controls == "keyboard") {
@@ -129,15 +133,17 @@ class Alien {
     } else if (controls == "mouse") {
       noCursor();
       bodyXLoc = mouseX;
-      if(mouseY > height/2){
+      if (mouseY > height/2) {
         bodyYLoc = mouseY;
-      }          
+      } else {
+        bodyYLoc = height/2;
+      }
       /*
       if(mousePressed){
-        bodyXLoc = mouseX;
-        bodyYLoc = mouseY;
-      }
-      */
+       bodyXLoc = mouseX;
+       bodyYLoc = mouseY;
+       }
+       */
     }
   }
 }
