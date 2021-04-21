@@ -20,6 +20,7 @@ Bullet bullet3;
 Spaceship spaceship;
 Enemy enemy1;
 Score score;
+boolean incrementScore = false;
 String savePreviousState;
 int element = 0;
 float ingameBkgCounter = 1;
@@ -45,9 +46,9 @@ void setup() {
   back = new Button(25, 25, width/16, height/16, "◄", 200, 100, 10);
   // Inizialization of "Alien" object
   mrAlien = new Alien(100, 115, 400, 690);
-  bullet1 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 15, 255, 255, 0);
-  bullet2 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 15, 255, 255, 0);
-  bullet3 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 15, 255, 255, 0);
+  bullet1 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 20, 255, 255, 0);
+  bullet2 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 20, 255, 255, 0);
+  bullet3 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 20, 255, 255, 0);
   enemy1 = new Enemy(mrAlien.bodyWidth, mrAlien.bodyHeight, width / 2, height / 2 - height / 6);
   score = new Score();
 }
@@ -82,13 +83,13 @@ void keyTyped() {
     // SHOOT BULLET
     if (bullet1.show == false) {
       bullet1.show = true;
-      bullet1.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc);
+      bullet1.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
     } else if (bullet2.show == false) {
       bullet2.show = true;
-      bullet2.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc);
+      bullet2.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
     } else if (bullet3.show == false) {
       bullet3.show = true;
-      bullet3.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc);
+      bullet3.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
     }
   }
 }
@@ -106,6 +107,7 @@ void startGame() {
   background(menuBkg);  
   if (startButton.isClicked()) {
     gameState = "PLAY";
+    resetGame();
   }
   startButton.update();
   startButton.render();
@@ -140,30 +142,57 @@ void playGame() {
   }
   back.update();
   back.render();
+  // Check for collisions
+  checkForCollision();
   // Calling Alien functions to show aliens on screen
   mrAlien.drawBody();
   mrAlien.drawFace();
   mrAlien.collision();
   bullet1.show();
-  bullet1.move();
-  bullet1.collision();
+  bullet1.move();  
   bullet2.show();
   bullet2.move();
-  bullet2.collision();
   bullet3.show();
   bullet3.move();
-  bullet3.collision();
   enemy1.drawBody();
-  enemy1.move(mrAlien.bodyWidth, mrAlien.bodyHeight);
-  enemy1.collision();
-  checkForCollision();
+  enemy1.move(mrAlien.bodyWidth, mrAlien.bodyHeight);  
   score.display();
 }
-void checkForCollision(){
+void checkForCollision() {
+  println("tomare");
+  if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet1.pos.x, bullet1.pos.y) <= enemy1.bodyWidth + bullet1.extent && bullet1.show == true && enemy1.show == true) {
+    println("funzia1");
+    enemy1.collision();
+    bullet1.show = false;
+    bullet1.collision();
+    incrementScore = true;
+  }else if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet2.pos.x, bullet2.pos.y) == enemy1.bodyWidth + bullet2.extent && bullet2.show == true && enemy1.show == true) {
+    enemy1.collision();
+    println("funzia2");
+    bullet2.show = false;
+    bullet2.collision();
+    incrementScore = true;
+  } else if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet3.pos.x, bullet3.pos.y) == enemy1.bodyWidth + bullet3.extent && bullet3.show == true && enemy1.show == true) {
+    enemy1.collision();
+    bullet3.show = false;
+    bullet3.collision();
+    incrementScore = true;
+  }else if(incrementScore == true){
+    //incrementScore = 2;
+    score.increaseScore(incrementScore);
+    incrementScore = false;
+  }
 }
 void winGame() {
 }
 void loseGame() {
+}
+void resetGame(){
+  bullet1.resetBullet();
+  bullet2.resetBullet();
+  bullet3.resetBullet();
+  enemy1.reset();
+  score.resetScore();
 }
 void gameSettings() {
   background(menuBkg);

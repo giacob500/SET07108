@@ -8,7 +8,7 @@ class Alien {
   int bodyXTrueLoc = 0;
   // Array made of 3 integers used to define a RGB color
   //random values doesn't start from 0 to exclude too dark color   
-  int bodyColor[] = {(int)random(50, 255), (int)random(50, 255), (int)random(50, 255)};
+  int bodyColor = color(random(50, 255), random(50, 255), random(50, 255));
 
   int headWidth;
   int headHeight;
@@ -18,12 +18,14 @@ class Alien {
   int moveXBy = 40;
   int moveYBy = 30;
 
+  PImage explosion;
+
   // Constructors
   Alien() {
     this.bodyWidth = 75;
     this.bodyHeight = 100;
     this.bodyXLoc = 400;
-    this.bodyYLoc = 650;
+    this.bodyYLoc = 650;loadImage("./images/enemy-explodes.png");
   }
 
   Alien(int bWidth, int bHeight, int startX, int startY) {
@@ -31,18 +33,19 @@ class Alien {
     this.bodyHeight = bHeight;
     this.bodyXLoc = startX;
     this.bodyYLoc = startY;
+    explosion = loadImage("./images/enemy-explodes.png");    
   }  
 
   // Draws body using goniometry for antennas
   void drawBody() {
     spawnSpaceship();
     strokeWeight(1);
-    stroke(bodyColor[0], bodyColor[1], bodyColor[2]);
+    stroke(bodyColor);
     noFill();
     arc((bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI, PI+HALF_PI);
     arc((bodyXLoc - (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI+HALF_PI, TAU);
     stroke(0);    
-    fill(bodyColor[0], bodyColor[1], bodyColor[2]);
+    fill(bodyColor);
     ellipse(bodyXLoc + bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8);
     ellipse(bodyXLoc - bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8); 
     // Draws body

@@ -7,7 +7,7 @@ class Score {
   // Constructors
   Score () {
     this.points = 0;
-    this.positionX = width - 150;
+    this.positionX = width - 175;
     this.positionY = 45;
     this.size= 35;
   }
@@ -26,7 +26,8 @@ class Score {
     text("Score: " + points, positionX, positionY);    
   }
   
-  void increaseScore(){
+  void increaseScore(boolean value){
+    if(value == true)
     points++;
   }
   
