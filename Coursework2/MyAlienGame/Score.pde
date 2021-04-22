@@ -1,8 +1,8 @@
 class Score {
+  int points;
   int size;
   int positionX;
-  int positionY;
-  int points;
+  int positionY;  
 
   // Constructors
   Score () {
@@ -18,12 +18,16 @@ class Score {
     this.positionY = positionY;
     this.size= size;
   }
+  
+  int getScore(){
+  return points;
+  }
 
-  void display() {
+  void show() {
     textAlign(CORNER, CORNER);
-    textSize(35);
+    textSize(size);
     fill(255, 255, 0);
-    text("Score: " + points, positionX, positionY);    
+    text("Score: " + points, positionX, positionY); 
   }
   
   //boolean value

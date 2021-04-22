@@ -1,5 +1,4 @@
 class Enemy {
-  //attributes that describe an Enemy
 
   float bodyWidth;
   float bodyHeight;
@@ -20,6 +19,7 @@ class Enemy {
   boolean showEnemy = true;
 
   //float moveXBy = 2;
+  float randomXStart = random(-3.35, 3.35);
   float moveXBy = random(-2.5, 2.5);
   //int negativeOrPositive = 0;
   int negativeOrPositive = (int)random(1, 2);
@@ -32,23 +32,27 @@ class Enemy {
     this.bodyWidth = 40;
     this.bodyHeight = 50;
     this.bodyXLoc = width / 2;
-    this.bodyYLoc = height / 2 - height / 6;
+    this.bodyYLoc = height / 2 - height / 6;  
+    this.speed = 1.005;
     this.bodyWidthCopy = bodyWidth;
     this.bodyHeightCopy = bodyHeight;
     this.bodyXLocCopy = bodyXLoc;
     this.bodyYLocCopy = bodyYLoc;
+    bodyXLoc += randomXStart;
     //explosion = loadImage("./images/enemy-explodes.png");
   }
 
-  Enemy(int bWidth, int bHeight, int startX, int startY) {
+  Enemy(int bWidth, int bHeight, int startX, int startY, float speed) {
     this.bodyWidth = bWidth / 6;
     this.bodyHeight = bHeight / 6;
     this.bodyXLoc = startX;
     this.bodyYLoc = startY;
+    this.speed = speed;
     this.bodyWidthCopy = bodyWidth;
     this.bodyHeightCopy = bodyHeight;
     this.bodyXLocCopy = bodyXLoc;
     this.bodyYLocCopy = bodyYLoc;
+    bodyXLoc += randomXStart;
     //this.explosion = loadImage("./images/enemy-explodes.png");
   }
 
@@ -102,8 +106,6 @@ class Enemy {
   }
 
   void collision() {
-    //if(showEnemy == true)
-    //image(explosion, bodyXLoc - bodyWidth / 2, bodyXLoc - bodyHeight / 2, bodyXLoc + bodyWidth / 2, bodyXLoc + bodyHeight / 2);
     showEnemy = false;
   }
 
@@ -113,6 +115,8 @@ class Enemy {
     bodyXLoc = bodyXLocCopy;
     bodyYLoc = bodyYLocCopy;
     bodyColor = color(random(50, 255), random(50, 255), random(50, 255));
+    randomXStart = random(-0.35, 0.35);
+    bodyXLoc += randomXStart;
     moveXBy = random(-2.5, 2.5);
     /*
     moveXBy = random(1, 1.05);

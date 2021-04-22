@@ -33,7 +33,7 @@ class Button {
   // To render button to the screen
   void render() {
     if (mouseX >= pos.x && mouseX <= pos.x+buttonWidth && mouseY >= pos.y && mouseY <= pos.y + buttonHeight) {
-      fill(colour - 150);
+      fill(59, 156, 255);
       strokeWeight(2);
       if (gameState != "PLAY")
         cursor = "HAND";
