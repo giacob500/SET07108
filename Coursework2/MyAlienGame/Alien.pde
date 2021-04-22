@@ -5,7 +5,10 @@ class Alien {
   int bodyHeight;
   int bodyXLoc;
   int bodyYLoc;
-  int bodyXTrueLoc = 0;
+  int bodyWidthCopy;
+  int bodyHeightCopy;
+  int bodyXLocCopy;
+  int bodyYLocCopy;
   // Array made of 3 integers used to define a RGB color
   //random values doesn't start from 0 to exclude too dark color   
   int bodyColor = color(random(50, 255), random(50, 255), random(50, 255));
@@ -18,38 +21,52 @@ class Alien {
   int moveXBy = 40;
   int moveYBy = 30;
 
-  PImage explosion;
+  boolean showAlien = true;
+
+  //PImage explosion;
 
   // Constructors
   Alien() {
     this.bodyWidth = 75;
     this.bodyHeight = 100;
     this.bodyXLoc = 400;
-    this.bodyYLoc = 650;loadImage("./images/enemy-explodes.png");
+    this.bodyYLoc = 690;
+    this.bodyWidthCopy = bodyWidth;
+    this.bodyHeightCopy = bodyHeight;
+    this.bodyXLocCopy = bodyXLoc;
+    this.bodyYLoc = bodyYLocCopy;
+    //this.bodyYLoc = 650;loadImage("./images/enemy-explodes.png");
   }
 
   Alien(int bWidth, int bHeight, int startX, int startY) {
     this.bodyWidth = bWidth;
     this.bodyHeight = bHeight;
     this.bodyXLoc = startX;
-    this.bodyYLoc = startY;
-    explosion = loadImage("./images/enemy-explodes.png");    
+    this.bodyYLoc = startY;    
+    this.bodyWidthCopy = bodyWidth;
+    this.bodyHeightCopy = bodyHeight;
+    this.bodyXLocCopy = bodyXLoc;
+    this.bodyYLocCopy = bodyYLoc;
+    //explosion = loadImage("./images/enemy-explodes.png");
   }  
 
   // Draws body using goniometry for antennas
   void drawBody() {
-    spawnSpaceship();
-    strokeWeight(1);
-    stroke(bodyColor);
-    noFill();
-    arc((bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI, PI+HALF_PI);
-    arc((bodyXLoc - (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI+HALF_PI, TAU);
-    stroke(0);    
-    fill(bodyColor);
-    ellipse(bodyXLoc + bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8);
-    ellipse(bodyXLoc - bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8); 
-    // Draws body
-    ellipse(bodyXLoc, bodyYLoc, bodyWidth, bodyHeight);
+    if (showAlien == true) {
+      spawnSpaceship();
+      strokeWeight(1);
+      stroke(bodyColor);
+      noFill();
+      arc((bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI, PI+HALF_PI);
+      arc((bodyXLoc - (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI+HALF_PI, TAU);
+      stroke(0);
+      fill(bodyColor);
+      ellipse(bodyXLoc + bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8);
+      ellipse(bodyXLoc - bodyWidth / 2, bodyYLoc - bodyHeight / 2, bodyWidth/8, bodyHeight/8); 
+      // Draws body
+      ellipse(bodyXLoc, bodyYLoc, bodyWidth, bodyHeight);
+      drawFace();
+    }
   }
 
   // Draws face using subfunctions
@@ -64,7 +81,7 @@ class Alien {
     headWidth = bodyWidth / 4;  
     headHeight = bodyHeight / 3;    
     headYloc = bodyYLoc - bodyHeight/20;
-    headXloc = (bodyXLoc - bodyWidth / 5);    
+    headXloc = (bodyXLoc - bodyWidth / 5);
     ellipse(headXloc, headYloc, headWidth, headHeight);
     headXloc = (bodyXLoc + bodyWidth / 5);
     ellipse(headXloc, headYloc, headWidth, headHeight);
@@ -112,8 +129,17 @@ class Alien {
     imageMode(CENTER);
     image(img, bodyXLoc, bodyYLoc, bodyHeight*2, bodyWidth*2.5);
   }
-  
-  void collision(){
+
+  void collision() {
+    showAlien = false;
+  }
+
+  void resetAlien() {
+    bodyWidth = bodyWidthCopy;
+    bodyHeight = bodyHeightCopy;
+    bodyXLoc = bodyXLocCopy;
+    bodyYLoc = bodyYLocCopy;
+    showAlien = true;
   }
 
   void move(String controls) {

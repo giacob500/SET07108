@@ -26,8 +26,9 @@ class Score {
     text("Score: " + points, positionX, positionY);    
   }
   
-  void increaseScore(boolean value){
-    if(value == true)
+  //boolean value
+  void increaseScore(){
+    //if(value == true)
     points++;
   }
   

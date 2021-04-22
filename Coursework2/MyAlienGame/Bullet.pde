@@ -4,8 +4,8 @@ class Bullet {
   color colour;
   PVector posCopy = new PVector(0, 0);
   float extentCopy;
-  boolean show = false;
-  float speed = 7.5;
+  boolean showBullet = false;
+  float speed = 7.5; // 7.5
 
   // Constructor to create a bullet
   Bullet(int x, int y, int e, int r, int g, int b) {
@@ -19,32 +19,36 @@ class Bullet {
   }
 
   void spawn(float xPostiton, float yPosition, int spawnHeight) {
-    if (show == true) {
-      fill(colour);
-      pos.x = xPostiton;
-      pos.y = yPosition - spawnHeight;
-    }
+    showBullet = true;
+    fill(colour);
+    pos.x = xPostiton;
+    pos.y = yPosition - spawnHeight;
   }
 
   void show() {
-    if (show == true) {
+    if (showBullet == true) {
       fill(colour);
       circle(pos.x, pos.y, extent);
     }
   }
 
-  void collision() {
-    // hide bullet
+  void collision() { 
+    showBullet = false;
+    extent = extentCopy;
   }
 
   void move() {
-    if (show == true) {
+    if (showBullet == true) {
+      //remember to sobstitute 0 with height / 3
       if (pos.y > height / 3) {
         pos.y = pos.y - speed;
-        extent *= 0.98;
+        //println(extent + " " + extentCopy);
+        if(extent > 5){
+          extent *= 0.98;
+        }        
       } else {
         extent = 15;
-        show = false;
+        showBullet = false;
       }
     }
   }
@@ -53,6 +57,6 @@ class Bullet {
     pos.x = posCopy.x;
     pos.y = posCopy.y;
     extent = extentCopy;
-    show = false;
+    showBullet = false;
   }
 }

@@ -43,8 +43,7 @@ class Button {
       strokeWeight(1);
       if (gameState != "PLAY")
         cursor = "ARROW";
-    }
-    println(cursor + " " + gameState);
+    }    
     rectMode(CORNER);
     rect(pos.x, pos.y, buttonWidth, buttonHeight); 
     fill(0);

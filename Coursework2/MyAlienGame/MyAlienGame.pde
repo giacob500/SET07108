@@ -1,5 +1,6 @@
 PImage ingameBkg;
 PImage menuBkg;
+PImage explosion;
 
 // Variables declaration
 String gameState;
@@ -24,6 +25,7 @@ boolean incrementScore = false;
 String savePreviousState;
 String cursor = "ARROW";
 boolean cursorCounter = false;
+boolean triggerExplosion = false;
 int element = 0;
 float ingameBkgCounter = 1;
 float valueCompare = 1;
@@ -31,12 +33,13 @@ PVector circle = new PVector(width/2, height/2);
 int circleWidth = 55;
 
 void setup() {
-  //frameRate(45);
+  frameRate(1000);
   size(800, 800);
   gameState = "START";
   controls = "mouse";
   savePreviousState = "";
   menuBkg = loadImage("./images/menu-bg.jpg");
+  explosion = loadImage("./images/enemy-explodes.png");
   startButton = new Button(width/2 - 150/2, height/2 - 100 - 75/2, 150, 75, "START", 200, 100, 10);
   settingsButton = new Button(width/2 - 150/2, height/2 - 75/2, 150, 75, "SETTINGS", 200, 100, 10);
   gameControlsButton = new Button(width/2 - 175/2, height/2 - 100 - 75/2, 175, 75, "CONTROLS", 200, 100, 10);
@@ -82,21 +85,26 @@ void keyTyped() {
       gameState = "EXIT";
     }
   } else if (key == 'm' || key == 'M') {
-    if (gameState != "START") {
-      savePreviousState = gameState;
+    if (gameState == "PLAY" || gameState == "LOSE") {
+      cursor = "ARROW";
       gameState = "START";
     }
   } else if (key == ' ') {
-    // SHOOT BULLET
-    if (bullet1.show == false) {
-      bullet1.show = true;
-      bullet1.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
-    } else if (bullet2.show == false) {
-      bullet2.show = true;
-      bullet2.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
-    } else if (bullet3.show == false) {
-      bullet3.show = true;
-      bullet3.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
+    if (gameState == "LOSE") {
+      resetGame();
+      gameState = "PLAY";      
+    } else {
+      // SHOOT BULLET
+      if (bullet1.showBullet == false) {
+        //bullet1.showBullet = true;
+        bullet1.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
+      } else if (bullet2.showBullet == false) {
+        //bullet2.showBullet = true;
+        bullet2.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
+      } else if (bullet3.showBullet == false) {
+        // bullet3.showBullet = true;
+        bullet3.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
+      }
     }
   }
 }
@@ -111,10 +119,11 @@ void mouseMoved() {
 
 void startGame() {
   // Put menu here
+
   background(menuBkg);  
   if (startButton.isClicked()) {
     cursor = "NONE";
-    gameState = "PLAY";    
+    gameState = "PLAY";
     resetGame();
   }
   startButton.update();
@@ -154,8 +163,6 @@ void playGame() {
   checkForCollision();
   // Calling Alien functions to show aliens on screen
   mrAlien.drawBody();
-  mrAlien.drawFace();
-  mrAlien.collision();
   bullet1.show();
   bullet1.move();  
   bullet2.show();
@@ -165,37 +172,59 @@ void playGame() {
   enemy1.drawBody();
   enemy1.move(mrAlien.bodyWidth, mrAlien.bodyHeight);  
   score.display();
+  /*
+  if (triggerExplosion == true) {
+   println("triggerExplosion is " + triggerExplosion);
+   // explosion for enemy
+   //image(explosion, enemy1.bodyXLoc - enemy1.bodyWidth / 2, enemy1.bodyYLoc - enemy1.bodyHeight / 2, enemy1.bodyXLoc + enemy1.bodyWidth / 2, enemy1.bodyYLoc + enemy1.bodyHeight / 2);
+   image(explosion, width/2, height/2, width/2 + 2, height/2);
+   println("image printed - " + score.points);
+   triggerExplosion = false;
+   }
+   */
 }
 void checkForCollision() {
   //println("tomare");
-  if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet1.pos.x, bullet1.pos.y) <= enemy1.bodyWidth + bullet1.extent && bullet1.show == true && enemy1.show == true) {
-    println("funzia1");
+  if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet1.pos.x, bullet1.pos.y) <= enemy1.bodyWidth + bullet1.extent && bullet1.showBullet == true && enemy1.showEnemy == true) {
     enemy1.collision();
-    bullet1.show = false;
+    //bullet1.showBullet = false;
     bullet1.collision();
     incrementScore = true;
-  } else if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet2.pos.x, bullet2.pos.y) == enemy1.bodyWidth + bullet2.extent && bullet2.show == true && enemy1.show == true) {
-    enemy1.collision();
-    println("funzia2");
-    bullet2.show = false;
+  } else if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet2.pos.x, bullet2.pos.y) <= enemy1.bodyWidth + bullet2.extent && bullet2.showBullet == true && enemy1.showEnemy == true) {
+    enemy1.collision();    
+    //bullet2.showBullet = false;
     bullet2.collision();
     incrementScore = true;
-  } else if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet3.pos.x, bullet3.pos.y) == enemy1.bodyWidth + bullet3.extent && bullet3.show == true && enemy1.show == true) {
+  } else if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet3.pos.x, bullet3.pos.y) <= enemy1.bodyWidth + bullet3.extent && bullet3.showBullet == true && enemy1.showEnemy == true) {
     enemy1.collision();
-    bullet3.show = false;
+    //bullet3.showBullet = false;
     bullet3.collision();
     incrementScore = true;
   } else if (incrementScore == true) {
-    //incrementScore = 2;
-    score.increaseScore(incrementScore);
+    score.increaseScore();
+    image(explosion, enemy1.bodyXLoc - enemy1.bodyWidth / 2, enemy1.bodyYLoc - enemy1.bodyHeight / 2, enemy1.bodyXLoc + enemy1.bodyWidth / 2, enemy1.bodyYLoc + enemy1.bodyHeight / 2);
     incrementScore = false;
   }
+  // Chek if alien dies
+  if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, mrAlien.bodyXLoc, mrAlien.bodyYLoc) <= enemy1.bodyWidth + mrAlien.bodyWidth && mrAlien.showAlien == true && enemy1.showEnemy == true) {
+    mrAlien.collision();
+    gameState = "LOSE";
+  }
+  //println(dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet2.pos.x, bullet2.pos.y));
 }
 void winGame() {
 }
 void loseGame() {
+  background(ingameBkg);
+  textSize(52);
+  fill(255, 0, 0);
+  textAlign(CENTER);
+  text("YOU LOST", width / 2, height / 5);
+  textSize(20);
+  text("Press 'M' to go to main menu.\nPress spacebar to quickly restart.", width / 2, height / 2);
 }
 void resetGame() {
+  mrAlien.resetAlien();
   bullet1.resetBullet();
   bullet2.resetBullet();
   bullet3.resetBullet();
@@ -253,10 +282,9 @@ void HowToPlay() {
       "Press up arrow key (↑) to move foreward\n" +
       "press down arrow key (↓) to move backward\n" +
       "press right arrow key (→) to move right\n" +
-      "press left arrow key (←) to move left.\n" +
-      "";
+      "press left arrow key (←) to move left.\n";
   }
-  instructions += "\nPress 'Q' to exit the game.";
+  instructions += "Press spacebar to shoot.\n\nWhile in-game press 'M' to go back at main menu.\nPress 'Q' to exit the game.";
   text(instructions, width / 2, height / 2);
   if (back.isClicked()) {
     gameState = "SETTINGS";
@@ -285,7 +313,7 @@ void gameCredits() {
   back.render();
 }
 void exitGame() {
-  if (savePreviousState == "PLAY") {
+  if (savePreviousState == "PLAY" || savePreviousState == "LOSE") {
     background(ingameBkg);
   } else {
     background(menuBkg);
@@ -322,9 +350,7 @@ void clearBackground() {
       noCursor();
     }
   }
-
   cursorCounter = false;
-
   fill(255);
   strokeWeight(1);
   rect(0, 0, width, height);

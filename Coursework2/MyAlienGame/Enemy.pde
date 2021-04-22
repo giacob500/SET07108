@@ -17,13 +17,15 @@ class Enemy {
   float headXloc;
   float headYloc;
 
-  boolean show = true;
+  boolean showEnemy = true;
 
-  float moveXBy = random(1, 1.05);
+  //float moveXBy = 2;
+  float moveXBy = random(-2.5, 2.5);
+  //int negativeOrPositive = 0;
   int negativeOrPositive = (int)random(1, 2);
-  float speed = 1.005;
+  float speed = 1.005; // 1.005
 
-  PImage explosion;
+  //PImage explosion;
 
   // Constructors  
   Enemy() {
@@ -35,7 +37,7 @@ class Enemy {
     this.bodyHeightCopy = bodyHeight;
     this.bodyXLocCopy = bodyXLoc;
     this.bodyYLocCopy = bodyYLoc;
-    explosion = loadImage("./images/enemy-explodes.png");
+    //explosion = loadImage("./images/enemy-explodes.png");
   }
 
   Enemy(int bWidth, int bHeight, int startX, int startY) {
@@ -47,12 +49,12 @@ class Enemy {
     this.bodyHeightCopy = bodyHeight;
     this.bodyXLocCopy = bodyXLoc;
     this.bodyYLocCopy = bodyYLoc;
-    this.explosion = loadImage("./images/enemy-explodes.png");
+    //this.explosion = loadImage("./images/enemy-explodes.png");
   }
 
   // Draws body using goniometry for antennas
   void drawBody() {
-    if (show == true && bodyYLoc < height) {
+    if (showEnemy == true && bodyYLoc < height) {
       stroke(bodyColor);
       noFill();
       arc((bodyXLoc + (bodyWidth / 2)), (bodyYLoc - bodyHeight / 4), bodyWidth/2, bodyHeight/2, PI, PI+HALF_PI);
@@ -71,7 +73,7 @@ class Enemy {
 
   // Draws face using subfunctions
   void drawFace() {
-    if (show == true) {
+    if (showEnemy == true) {
       drawEyes();
       drawMouth();
     }
@@ -83,10 +85,10 @@ class Enemy {
     headWidth = bodyWidth / 4;  
     headHeight = bodyHeight / 3;    
     headYloc = bodyYLoc - bodyHeight/20;
-    headXloc = (bodyXLoc - bodyWidth / 5);    
-    ellipse(headXloc, headYloc, headWidth, headHeight);
-    headXloc = (bodyXLoc + bodyWidth / 5);
-    ellipse(headXloc, headYloc, headWidth, headHeight);
+    headXloc = (bodyXLoc - bodyWidth / 5);
+    arc(headXloc, headYloc, headWidth, headHeight, 0, PI+QUARTER_PI, CHORD);
+    headXloc = (bodyXLoc + bodyWidth / 6);
+    arc(headXloc, headYloc, headWidth, headHeight, -QUARTER_PI, PI, CHORD);
   } 
 
   // Draws mouth
@@ -100,9 +102,9 @@ class Enemy {
   }
 
   void collision() {
-    //if(show == true)
-    image(explosion, bodyXLoc - bodyWidth / 2, bodyXLoc - bodyHeight / 2, bodyXLoc + bodyWidth / 2, bodyXLoc + bodyHeight / 2);
-    show = false;
+    //if(showEnemy == true)
+    //image(explosion, bodyXLoc - bodyWidth / 2, bodyXLoc - bodyHeight / 2, bodyXLoc + bodyWidth / 2, bodyXLoc + bodyHeight / 2);
+    showEnemy = false;
   }
 
   void reset() {
@@ -110,7 +112,13 @@ class Enemy {
     bodyHeight = bodyHeightCopy;
     bodyXLoc = bodyXLocCopy;
     bodyYLoc = bodyYLocCopy;
-    show = true;
+    bodyColor = color(random(50, 255), random(50, 255), random(50, 255));
+    moveXBy = random(-2.5, 2.5);
+    /*
+    moveXBy = random(1, 1.05);
+    negativeOrPositive = (int)random(1, 2);
+    */
+    showEnemy = true;
   }
 
   void move(int alienBodyWidth, int alienBodyHeight) {
@@ -144,10 +152,15 @@ class Enemy {
      headYloc = bodyYLoc + (bodyHeight / 4);
      headXloc = bodyXLoc; 
      ellipse(headXloc, headYloc, headWidth, headHeight);
-     */
+     
     drawBody();
     drawFace();
-
+    
+    if (negativeOrPositive == 1)
+      moveXBy *= -1;
+      */
+    bodyXLoc += moveXBy;
+    
     // Increase variables
     if (bodyWidth < alienBodyWidth || bodyHeight < alienBodyHeight) {
       bodyWidth*=speed*speed;
