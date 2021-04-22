@@ -25,22 +25,26 @@ class Button {
     } else {
       clicked = false;
     }    
-    if(mousePressed != true){
+    if (mousePressed != true) {
       pressed = false;
     }
   }
 
   // To render button to the screen
   void render() {
-    if(mouseX >= pos.x && mouseX <= pos.x+buttonWidth && mouseY >= pos.y && mouseY <= pos.y + buttonHeight){
-      fill(colour-150);
-      cursor(HAND);
+    if (mouseX >= pos.x && mouseX <= pos.x+buttonWidth && mouseY >= pos.y && mouseY <= pos.y + buttonHeight) {
+      fill(colour - 150);
       strokeWeight(2);
-    }else{
+      if (gameState != "PLAY")
+        cursor = "HAND";
+        cursorCounter = true;
+    } else {
       fill(colour);
-      cursor(ARROW);
       strokeWeight(1);
-    }  
+      if (gameState != "PLAY")
+        cursor = "ARROW";
+    }
+    println(cursor + " " + gameState);
     rectMode(CORNER);
     rect(pos.x, pos.y, buttonWidth, buttonHeight); 
     fill(0);

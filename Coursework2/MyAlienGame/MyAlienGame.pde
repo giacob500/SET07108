@@ -22,6 +22,8 @@ Enemy enemy1;
 Score score;
 boolean incrementScore = false;
 String savePreviousState;
+String cursor = "ARROW";
+boolean cursorCounter = false;
 int element = 0;
 float ingameBkgCounter = 1;
 float valueCompare = 1;
@@ -79,6 +81,11 @@ void keyTyped() {
       savePreviousState = gameState;
       gameState = "EXIT";
     }
+  } else if (key == 'm' || key == 'M') {
+    if (gameState != "START") {
+      savePreviousState = gameState;
+      gameState = "START";
+    }
   } else if (key == ' ') {
     // SHOOT BULLET
     if (bullet1.show == false) {
@@ -106,7 +113,8 @@ void startGame() {
   // Put menu here
   background(menuBkg);  
   if (startButton.isClicked()) {
-    gameState = "PLAY";
+    cursor = "NONE";
+    gameState = "PLAY";    
     resetGame();
   }
   startButton.update();
@@ -122,7 +130,6 @@ void startGame() {
   }
   exitButton.update();
   exitButton.render();
-  cursor(ARROW);
 }
 
 void playGame() {
@@ -139,6 +146,7 @@ void playGame() {
   // back button
   if (back.isClicked()) {
     gameState = "START";
+    cursor = "ARROW";
   }
   back.update();
   back.render();
@@ -159,14 +167,14 @@ void playGame() {
   score.display();
 }
 void checkForCollision() {
-  println("tomare");
+  //println("tomare");
   if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet1.pos.x, bullet1.pos.y) <= enemy1.bodyWidth + bullet1.extent && bullet1.show == true && enemy1.show == true) {
     println("funzia1");
     enemy1.collision();
     bullet1.show = false;
     bullet1.collision();
     incrementScore = true;
-  }else if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet2.pos.x, bullet2.pos.y) == enemy1.bodyWidth + bullet2.extent && bullet2.show == true && enemy1.show == true) {
+  } else if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet2.pos.x, bullet2.pos.y) == enemy1.bodyWidth + bullet2.extent && bullet2.show == true && enemy1.show == true) {
     enemy1.collision();
     println("funzia2");
     bullet2.show = false;
@@ -177,7 +185,7 @@ void checkForCollision() {
     bullet3.show = false;
     bullet3.collision();
     incrementScore = true;
-  }else if(incrementScore == true){
+  } else if (incrementScore == true) {
     //incrementScore = 2;
     score.increaseScore(incrementScore);
     incrementScore = false;
@@ -187,7 +195,7 @@ void winGame() {
 }
 void loseGame() {
 }
-void resetGame(){
+void resetGame() {
   bullet1.resetBullet();
   bullet2.resetBullet();
   bullet3.resetBullet();
@@ -286,12 +294,12 @@ void exitGame() {
   strokeWeight(1);
   rectMode(CENTER);
   rect(width / 2, height / 2 - confirmExit.buttonHeight / 2, (confirmExit.buttonWidth + confirmExit.buttonWidth / 2)*2, confirmExit.buttonHeight * 3);
-  if (confirmExit.isClicked()) {
-    exit();
-  }
   textSize(30);
   fill(0);
   text("Are you sure?", width / 2, height / 2 - (confirmExit.buttonHeight / 2) * 3);
+  if (confirmExit.isClicked()) {
+    exit();
+  }  
   confirmExit.update();
   confirmExit.render();
   if (rejectExit.isClicked()) {
@@ -303,6 +311,20 @@ void exitGame() {
 
 
 void clearBackground() {
+  if (cursorCounter == true)
+    cursor(HAND);
+  else {
+    if (cursor == "ARROW") {
+      cursor(ARROW);
+    } else if (cursor == "HAND") {
+      cursor(HAND);
+    } else if (cursor == "NONE") {
+      noCursor();
+    }
+  }
+
+  cursorCounter = false;
+
   fill(255);
   strokeWeight(1);
   rect(0, 0, width, height);

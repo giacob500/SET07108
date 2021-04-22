@@ -134,7 +134,6 @@ class Alien {
         }
       }
     } else if (controls == "mouse") {
-      noCursor();
       bodyXLoc = mouseX;
       if (mouseY > height/2) {
         bodyYLoc = mouseY;
