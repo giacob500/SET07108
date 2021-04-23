@@ -134,10 +134,10 @@ class Alien {
       }
     } else if (controls == "mouse") {
       bodyXLoc = mouseX;
-      if (mouseY > height/2) {
+      if (mouseY > height/2 + bodyHeight) {
         bodyYLoc = mouseY;
       } else {
-        bodyYLoc = height/2;
+        bodyYLoc = height/2 + bodyHeight;
       }
       /*
       if(mousePressed){

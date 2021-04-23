@@ -83,13 +83,13 @@ void setup() {
   cancelSound = new SoundFile(this, "./sounds/cancel.mp3");
   menuBkgSound = new SoundFile(this, "./sounds/menu-background-theme.wav");
   ingameBkgSound = new SoundFile(this, "./sounds/ingame-background-theme.wav");
-  startButton = new Button(width/2 - 150/2, height/2 - 100 - 75/2, 150, 75, "START", 3, 127, 252);
-  settingsButton = new Button(width/2 - 150/2, height/2 - 75/2, 150, 75, "SETTINGS", 3, 127, 252);
+  startButton = new Button(width/2 - 150/2, height/2 - 75/2, 150, 75, "START", 3, 127, 252);
+  settingsButton = new Button(width/2 - 150/2, height/2 + 100 - 75/2, 150, 75, "SETTINGS", 3, 127, 252);
   gameControlsButton = new Button(width/2 - 200/2, height/2 - 100 - 75/2, 200, 75, "CONTROLS", 3, 127, 252);  
   instructionsButton = new Button(width/2  - 250 - 200/2, height/2 - 100 - 75/2, 200, 75, "HOW TO PLAY", 3, 127, 252);
   creditsButton = new Button(width/2 + 250 - 200/2, height/2 - 100 - 75/2, 200, 75, "CREDITS", 3, 127, 252);
   musicVolumeButton = new Button(width/2 + 125 - 125/2, height/2 + 100, 125, 125, "", 3, 127, 252);
-  exitButton = new Button(width/2 - 150/2, height/2 + 100 - 75/2, 150, 75, "EXIT GAME", 3, 127, 252);
+  exitButton = new Button(width/2 - 150/2, height/2 + 200 - 75/2, 150, 75, "EXIT GAME", 3, 127, 252);
   confirmExit = new Button(width/2 - 150/2 - 100, height/2 - 75/2, 150, 75, "Confirm", 3, 127, 252);
   rejectExit = new Button(width/2 - 150/2  + 100, height/2- 75/2, 150, 75, "Cancel", 3, 127, 252);
   back = new Button(25, 25, width/16, height/16, "", 3, 127, 252);
@@ -333,7 +333,7 @@ void winGame() {
   imageMode(CENTER);
   image(victory, width / 2, height / 3, width / 8, height / 8);
   textSize(25);
-  text("Press 'M' to go to main menu.\nPress 'P' to quickly restart.", width / 2, height / 2);
+  text("Press 'M' to go to main menu.\nPress 'P' to quickly restart.\nPress 'Q' to exit the game.", width / 2, height / 2);
   textSize(35);
   text("Score:\n" + score.getScore(), width / 2, (height / 4) * 3);
 }
@@ -346,7 +346,7 @@ void loseGame() {
   imageMode(CENTER);
   image(gameover, width / 2, height / 3, width / 8, height / 8);
   textSize(25);
-  text("Press 'M' to go to main menu.\nPress 'P' to quickly restart.", width / 2, height / 2);
+  text("Press 'M' to go to main menu.\nPress 'P' to quickly restart.\nPress 'Q' to exit the game.", width / 2, height / 2);
   textSize(35);
   text("Score:\n" + score.getScore(), width / 2, (height / 4) * 3);
 }
@@ -371,7 +371,7 @@ void gameSettings() {
   text(controls, gameControlsButton.pos.x + (gameControlsButton.buttonWidth / 2), gameControlsButton.pos.y - 30);
   textSize(25);
   text("Choose spaceship:", chooseSpaceshipButton.pos.x + (chooseSpaceshipButton.buttonWidth / 2), chooseSpaceshipButton.pos.y - 30);
-  text("Background music:", musicVolumeButton.pos.x + (musicVolumeButton.buttonWidth / 2), musicVolumeButton.pos.y - 30);
+  text("Game music:", musicVolumeButton.pos.x + (musicVolumeButton.buttonWidth / 2), musicVolumeButton.pos.y - 30);
   if (gameControlsButton.isClicked()) {
     gameControls();
   }
@@ -456,13 +456,15 @@ void gameCredits() {
   fill(255, 0, 0);
   text("CREDITS", width / 2, height / 16);
   fill(0, 255, 0);
-  textSize(20);
+  textSize(24);
   String storeFileLines = "";
   String[] lines = loadStrings("credits.txt");
   for (int i = 0; i < lines.length; i++) {
     storeFileLines += lines[i] + "\n";
   }
   text(storeFileLines, width / 2, height / 2);
+  textSize(18);
+  text("©2021 All rights reserved.", width / 2, height - (height / 16));
   if (back.isClicked()) {
     selectSound.play();
     gameState = "SETTINGS";
