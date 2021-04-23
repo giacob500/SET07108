@@ -9,8 +9,6 @@ class Alien {
   int bodyHeightCopy;
   int bodyXLocCopy;
   int bodyYLocCopy;
-  // Array made of 3 integers used to define a RGB color
-  //random values doesn't start from 0 to exclude too dark color   
   int bodyColor = color(random(50, 255), random(50, 255), random(50, 255));
 
   int headWidth;
@@ -21,8 +19,9 @@ class Alien {
   int moveXBy = 40;
   int moveYBy = 30;
 
-  boolean showAlien = true;
+  //boolean showAlien = true;
 
+  PImage spaceship1;
   //PImage explosion;
 
   // Constructors
@@ -52,8 +51,8 @@ class Alien {
 
   // Draws body using goniometry for antennas
   void drawBody() {
-    if (showAlien == true) {
-      spawnSpaceship();
+    //if (showAlien == true) {
+      //spawnSpaceship();
       strokeWeight(1);
       stroke(bodyColor);
       noFill();
@@ -66,7 +65,7 @@ class Alien {
       // Draws body
       ellipse(bodyXLoc, bodyYLoc, bodyWidth, bodyHeight);
       drawFace();
-    }
+    //}
   }
 
   // Draws face using subfunctions
@@ -96,42 +95,16 @@ class Alien {
     headXloc = bodyXLoc; 
     ellipse(headXloc, headYloc, headWidth, headHeight);
   }
-  /*
-  void checkForBounce() {
-   // If one of the lateral edges is hit change speed and direction
-   if (bodyXLoc >= (width -(bodyWidth / 2))) {
-   moveXBy = (int)random(2, 4);
-   moveXBy = moveXBy * -1;
-   }
-   if (bodyXLoc <= (0 + (bodyWidth / 2))) {
-   moveXBy = (int)random(2, 4);
-   }
-   if (bodyYLoc >= (height -(bodyHeight / 2))) {
-   moveYBy = (int)random(2, 4);      
-   moveYBy = moveYBy * -1;
-   }
-   if (bodyYLoc <= (0 + (bodyHeight / 2))) {
-   moveYBy = (int)random(2, 4);
-   }
-   }
-   */
-  /*
-   // Increase locaiton value to give movement effect
-   void move() {
-   bodyXLoc = bodyXLoc + moveXBy;
-   bodyYLoc = bodyYLoc + moveYBy;
-   }
-   */
-
+  
   void spawnSpaceship() {
-    img = loadImage("./images/spaceship_1_centered.png");
+    spaceship1 = loadImage("./images/spaceship_1_centered.png");
     //image(img, width / 2 - 244, bodyYLoc - bodyHeight / 2);
     imageMode(CENTER);
-    image(img, bodyXLoc, bodyYLoc, bodyHeight*2, bodyWidth*2.5);
+    image(spaceship1, bodyXLoc, bodyYLoc, bodyWidth*2.5, bodyHeight*2);
   }
 
   void collision() {
-    showAlien = false;
+    //showAlien = false;
   }
 
   void resetAlien() {
@@ -139,7 +112,7 @@ class Alien {
     bodyHeight = bodyHeightCopy;
     bodyXLoc = bodyXLocCopy;
     bodyYLoc = bodyYLocCopy;
-    showAlien = true;
+    //showAlien = true;
   }
 
   void move(String controls) {

@@ -51,6 +51,25 @@ class Button {
     textAlign(CENTER, CENTER);
     text(text, pos.x + (buttonWidth / 2), pos.y + (buttonHeight / 2));
   }
+  
+  void renderWithoutText(PImage sapceshipNumber) {
+    if (mouseX >= pos.x && mouseX <= pos.x+buttonWidth && mouseY >= pos.y && mouseY <= pos.y + buttonHeight) {
+      fill(59, 156, 255);
+      strokeWeight(2);
+      if (gameState != "PLAY")
+        cursor = "HAND";
+        cursorCounter = true;
+    } else {
+      fill(colour);
+      strokeWeight(1);
+      if (gameState != "PLAY")
+        cursor = "ARROW";
+    }    
+    rectMode(CORNER);
+    rect(pos.x, pos.y, buttonWidth, buttonHeight); 
+    imageMode(CENTER);
+  }
+  
   boolean isClicked() {
     return clicked;
   }

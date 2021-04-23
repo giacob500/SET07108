@@ -6,11 +6,20 @@ SoundFile hitEnemySound;
 SoundFile selectSound;
 SoundFile switchSound;
 SoundFile cancelSound;
+SoundFile menuBkgSound;
+SoundFile ingameBkgSound;
 
 PImage ingameBkg;
+PImage menuTitleBkg;
 PImage menuBkg;
 PImage explosion;
+PImage gameover;
 PImage victory;
+PImage musicOn;
+PImage musicOff;
+PImage backImage;
+
+PFont gameFont;
 
 // Variables declaration
 String gameState;
@@ -18,8 +27,10 @@ String controls;
 Button startButton;
 Button settingsButton;
 Button gameControlsButton;
+Button chooseSpaceshipButton;
 Button instructionsButton;
 Button creditsButton;
+Button musicVolumeButton;
 Button exitButton;
 Button confirmExit;
 Button rejectExit;
@@ -34,11 +45,14 @@ Enemy enemy2;
 Enemy enemy3;
 Score score;
 Timer timer;
+int spaceshipNumber = 1;
 boolean incrementScore = false;
 String savePreviousState;
 String cursor = "ARROW";
 boolean cursorCounter = false;
 boolean triggerExplosion = false;
+boolean volumeSwitch = true;
+boolean oldVolumeSwitch = true;
 int element = 0;
 float ingameBkgCounter = 1;
 float valueCompare = 1;
@@ -49,11 +63,17 @@ void setup() {
   frameRate(1000);
   size(800, 800);
   gameState = "START";
-  controls = "keyboard";
+  controls = "mouse";
   savePreviousState = "";
   menuBkg = loadImage("./images/menu-bg.jpg");
+  menuTitleBkg = loadImage("./images/menu-bg-title.jpg");
   explosion = loadImage("./images/enemy-explodes.png");
+  gameover = loadImage("./images/game-over.png");
   victory = loadImage("./images/victory-cup.png");
+  musicOn = loadImage("./images/sound-on.png");
+  musicOff = loadImage("./images/sound-off.png");
+  backImage = loadImage("./images/back.png");
+  gameFont = loadFont("MyriadPro-Cond-48.vlw");
   winSound = new SoundFile(this, "./sounds/win.wav");
   gameOverSound = new SoundFile(this, "./sounds/game-over.wav");
   shootSound = new SoundFile(this, "./sounds/shoot.wav");
@@ -61,26 +81,34 @@ void setup() {
   selectSound = new SoundFile(this, "./sounds/menu-selection.wav");
   switchSound = new SoundFile(this, "./sounds/switch-controls.wav");
   cancelSound = new SoundFile(this, "./sounds/cancel.mp3");
+  menuBkgSound = new SoundFile(this, "./sounds/menu-background-theme.wav");
+  ingameBkgSound = new SoundFile(this, "./sounds/ingame-background-theme.wav");
   startButton = new Button(width/2 - 150/2, height/2 - 100 - 75/2, 150, 75, "START", 3, 127, 252);
   settingsButton = new Button(width/2 - 150/2, height/2 - 75/2, 150, 75, "SETTINGS", 3, 127, 252);
-  gameControlsButton = new Button(width/2 - 175/2, height/2 - 100 - 75/2, 175, 75, "CONTROLS", 3, 127, 252);
-  instructionsButton = new Button(width/2 - 175/2, height/2 - 75/2, 175, 75, "HOW TO PLAY", 3, 127, 252);
-  creditsButton = new Button(width/2 - 175/2, height/2 + 100 - 75/2, 175, 75, "CREDITS", 3, 127, 252);
+  gameControlsButton = new Button(width/2 - 200/2, height/2 - 100 - 75/2, 200, 75, "CONTROLS", 3, 127, 252);  
+  instructionsButton = new Button(width/2  - 250 - 200/2, height/2 - 100 - 75/2, 200, 75, "HOW TO PLAY", 3, 127, 252);
+  creditsButton = new Button(width/2 + 250 - 200/2, height/2 - 100 - 75/2, 200, 75, "CREDITS", 3, 127, 252);
+  musicVolumeButton = new Button(width/2 + 125 - 125/2, height/2 + 100, 125, 125, "", 3, 127, 252);
   exitButton = new Button(width/2 - 150/2, height/2 + 100 - 75/2, 150, 75, "EXIT GAME", 3, 127, 252);
   confirmExit = new Button(width/2 - 150/2 - 100, height/2 - 75/2, 150, 75, "Confirm", 3, 127, 252);
   rejectExit = new Button(width/2 - 150/2  + 100, height/2- 75/2, 150, 75, "Cancel", 3, 127, 252);
-  back = new Button(25, 25, width/16, height/16, "◄", 3, 127, 252);
+  back = new Button(25, 25, width/16, height/16, "", 3, 127, 252);
   // Inizialization of "Alien" object
   mrAlien = new Alien(100, 115, 400, 690);
+  spaceship = new Spaceship(mrAlien.bodyWidth * 2, mrAlien.bodyHeight * 2, mrAlien.bodyXLoc, mrAlien.bodyYLoc);
+  chooseSpaceshipButton = new Button(width/2 - 125 - 125/2, height/2 + 100, 125, 125, "", 3, 127, 252);
+  //spaceship = new Spaceship(50, 50, 400, 400);
   bullet1 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 20, 255, 255, 0);
   bullet2 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 20, 255, 255, 0);
   bullet3 = new Bullet(mrAlien.bodyXLoc, mrAlien.bodyYLoc, 20, 255, 255, 0);
-  enemy1 = new Enemy(mrAlien.bodyWidth, mrAlien.bodyHeight, width / 2, height / 2 - height / 6, 1.015);
+  enemy1 = new Enemy(mrAlien.bodyWidth, mrAlien.bodyHeight, width / 2, height / 2 - height / 6, 1.01);
   enemy2 = new Enemy(mrAlien.bodyWidth, mrAlien.bodyHeight, width / 2 - 50, height / 2 - height / 6, 1.005);
-  enemy3 = new Enemy(mrAlien.bodyWidth, mrAlien.bodyHeight, width / 2 + 50, height / 2 - height / 6, 1.001);
+  enemy3 = new Enemy(mrAlien.bodyWidth, mrAlien.bodyHeight, width / 2 + 50, height / 2 - height / 6, 1.008);
   score = new Score();
-  timer = new Timer(30, width / 2, 45, 35);
-}
+  timer = new Timer(70, width / 2, 45, 35);
+  ingameBkgSound.loop();
+  textFont(gameFont, 24);
+} 
 
 void draw() {  
   clearBackground();
@@ -113,24 +141,22 @@ void keyTyped() {
       cursor = "ARROW";
       gameState = "START";
     }
-  } else if (key == ' ') {
-    if (gameState == "LOSE" || gameState == "WIN") {
-      resetGame();
-      gameState = "PLAY";
-    } else {
-      // SHOOT BULLET
-      shootSound.play();
-      if (bullet1.showBullet == false) {
-        //bullet1.showBullet = true;
-        bullet1.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
-      } else if (bullet2.showBullet == false) {
-        //bullet2.showBullet = true;
-        bullet2.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
-      } else if (bullet3.showBullet == false) {
-        // bullet3.showBullet = true;
-        bullet3.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
-      }
+  } else if (key == ' ' && gameState == "PLAY") {
+    // SHOOT BULLET
+    shootSound.play();
+    if (bullet1.showBullet == false) {
+      //bullet1.showBullet = true;
+      bullet1.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
+    } else if (bullet2.showBullet == false) {
+      //bullet2.showBullet = true;
+      bullet2.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
+    } else if (bullet3.showBullet == false) {
+      // bullet3.showBullet = true;
+      bullet3.spawn(mrAlien.bodyXLoc, mrAlien.bodyYLoc, mrAlien.bodyHeight);
     }
+  } else if ((key == 'p' || key == 'P') && (gameState == "LOSE" || gameState == "WIN")) {
+    resetGame();
+    gameState = "PLAY";
   }
 }
 
@@ -144,11 +170,11 @@ void mouseMoved() {
 
 void startGame() {
   // Put menu here
-
-  background(menuBkg);  
+  background(menuTitleBkg);  
   if (startButton.isClicked()) {
     selectSound.play();
-    cursor = "NONE";    
+    if(controls == "mouse")
+    cursor = "NONE";
     gameState = "PLAY";
     resetGame();
   }
@@ -188,7 +214,9 @@ void playGame() {
   }
   back.update();
   back.render();
-  // Calling Alien functions to show aliens on screen
+  drawBackIcon();
+  // Calling Alien functions to show aliens on screen  
+  spaceship.spawnSpaceship(mrAlien.bodyXLoc, mrAlien.bodyYLoc, spaceshipNumber);
   mrAlien.drawBody();
   bullet1.show();
   bullet1.move();  
@@ -208,8 +236,8 @@ void playGame() {
   // Check for collisions
   checkForCollision();
   if (timer.getTime() <= 0.01) {
-    gameState = "WIN";
     winSound.play();
+    gameState = "WIN";
   }
 }
 void checkForCollision() {
@@ -233,7 +261,8 @@ void checkForCollision() {
     hitEnemySound.play();
     score.increaseScore();
     imageMode(CENTER);
-    image(explosion, enemy1.bodyXLoc, enemy1.bodyYLoc, 150, 150);
+    //image(explosion, enemy1.bodyXLoc, enemy2.bodyYLoc, 150, 150);
+    image(explosion, width/3, height/3, 150, 150);
     incrementScore = false;
   }
   // Check collision for enemy 2
@@ -256,7 +285,8 @@ void checkForCollision() {
     hitEnemySound.play();
     score.increaseScore();
     imageMode(CENTER);
-    image(explosion, enemy2.bodyXLoc, enemy2.bodyYLoc, 150, 150);
+    //image(explosion, enemy1.bodyXLoc, enemy2.bodyYLoc, 150, 150);
+    image(explosion, width/3, height/3, 150, 150);
     incrementScore = false;
   }
   // Check collision for enemy 3
@@ -279,16 +309,18 @@ void checkForCollision() {
     hitEnemySound.play();
     score.increaseScore();
     imageMode(CENTER);
-    image(explosion, enemy3.bodyXLoc, enemy3.bodyYLoc, 150, 150);
+    //image(explosion, enemy1.bodyXLoc, enemy2.bodyYLoc, 150, 150);
+    image(explosion, width/3, height/3, 150, 150);
     incrementScore = false;
   }
   // Chek if alien dies
-  if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, mrAlien.bodyXLoc, mrAlien.bodyYLoc) * 2 <= enemy1.bodyWidth + mrAlien.bodyWidth && mrAlien.showAlien == true && enemy1.showEnemy == true
-  || dist(enemy2.bodyXLoc, enemy2.bodyYLoc, mrAlien.bodyXLoc, mrAlien.bodyYLoc) * 2 <= enemy2.bodyWidth + mrAlien.bodyWidth && mrAlien.showAlien == true && enemy2.showEnemy == true
-  || dist(enemy3.bodyXLoc, enemy3.bodyYLoc, mrAlien.bodyXLoc, mrAlien.bodyYLoc) * 2 <= enemy3.bodyWidth + mrAlien.bodyWidth && mrAlien.showAlien == true && enemy3.showEnemy == true) {
+  //  && mrAlien.showAlien == true
+  if (dist(enemy1.bodyXLoc, enemy1.bodyYLoc, mrAlien.bodyXLoc, mrAlien.bodyYLoc) * 1.5 <= enemy1.bodyWidth + mrAlien.bodyWidth && enemy1.showEnemy == true
+    || dist(enemy2.bodyXLoc, enemy2.bodyYLoc, mrAlien.bodyXLoc, mrAlien.bodyYLoc) * 1.5 <= enemy2.bodyWidth + mrAlien.bodyWidth && enemy2.showEnemy == true
+    || dist(enemy3.bodyXLoc, enemy3.bodyYLoc, mrAlien.bodyXLoc, mrAlien.bodyYLoc) * 1.5 <= enemy3.bodyWidth + mrAlien.bodyWidth && enemy3.showEnemy == true) {
     mrAlien.collision();
     gameOverSound.play();
-    gameState = "LOSE";    
+    gameState = "LOSE";
   }
   //println(dist(enemy1.bodyXLoc, enemy1.bodyYLoc, bullet2.pos.x, bullet2.pos.y));
 }
@@ -299,11 +331,11 @@ void winGame() {
   textAlign(CENTER);
   text("YOU WON!!!", width / 2, height / 5);
   imageMode(CENTER);
-  image(victory, width / 2, height / 3, width / 8, width / 8);
+  image(victory, width / 2, height / 3, width / 8, height / 8);
   textSize(25);
-  text("Press 'M' to go to main menu.\nPress spacebar to quickly restart.", width / 2, height / 2);
+  text("Press 'M' to go to main menu.\nPress 'P' to quickly restart.", width / 2, height / 2);
   textSize(35);
-  text("Score\n" + score.getScore(), width / 2, (height / 4) * 3);
+  text("Score:\n" + score.getScore(), width / 2, (height / 4) * 3);
 }
 void loseGame() {  
   background(ingameBkg);
@@ -311,10 +343,12 @@ void loseGame() {
   fill(255, 0, 0);
   textAlign(CENTER);
   text("YOU LOST", width / 2, height / 5);
+  imageMode(CENTER);
+  image(gameover, width / 2, height / 3, width / 8, height / 8);
   textSize(25);
-  text("Press 'M' to go to main menu.\nPress spacebar to quickly restart.", width / 2, height / 2);
+  text("Press 'M' to go to main menu.\nPress 'P' to quickly restart.", width / 2, height / 2);
   textSize(35);
-  text("Score\n" + score.getScore(), width / 2, (height / 4) * 3);
+  text("Score:\n" + score.getScore(), width / 2, (height / 4) * 3);
 }
 void resetGame() {
   mrAlien.resetAlien();
@@ -335,17 +369,37 @@ void gameSettings() {
   textSize(30);
   fill(0, 255, 0);
   text(controls, gameControlsButton.pos.x + (gameControlsButton.buttonWidth / 2), gameControlsButton.pos.y - 30);
+  textSize(25);
+  text("Choose spaceship:", chooseSpaceshipButton.pos.x + (chooseSpaceshipButton.buttonWidth / 2), chooseSpaceshipButton.pos.y - 30);
+  text("Background music:", musicVolumeButton.pos.x + (musicVolumeButton.buttonWidth / 2), musicVolumeButton.pos.y - 30);
   if (gameControlsButton.isClicked()) {
     gameControls();
   }
   gameControlsButton.update();
   gameControlsButton.render();
+  if (musicVolumeButton.isClicked()) {
+    switchSound.play();
+    volumeSwitch = !volumeSwitch;
+  }
+  musicVolumeButton.update();
+  musicVolumeButton.render();
+  musicController(musicVolumeButton.pos.x + musicVolumeButton.buttonWidth * 0.50, musicVolumeButton.pos.y + musicVolumeButton.buttonHeight * 0.50, musicVolumeButton.buttonWidth * 0.75, musicVolumeButton.buttonHeight * 0.75, volumeSwitch);
   if (instructionsButton.isClicked()) {
     selectSound.play();
     gameState = "INSTRUCTIONS";
   }
   instructionsButton.update();
   instructionsButton.render();
+  if (chooseSpaceshipButton.isClicked()) {
+    switchSound.play();
+    if (spaceshipNumber == 4)
+      spaceshipNumber = 1;
+    else
+      spaceshipNumber++;
+  }
+  chooseSpaceshipButton.update();
+  chooseSpaceshipButton.render();
+  spaceship.spawnOnButton(chooseSpaceshipButton.pos.x, chooseSpaceshipButton.pos.y, chooseSpaceshipButton.buttonWidth, chooseSpaceshipButton.buttonHeight, spaceshipNumber);
   if (creditsButton.isClicked()) {
     selectSound.play();
     gameState = "CREDITS";
@@ -358,6 +412,7 @@ void gameSettings() {
   }
   back.update();
   back.render();
+  drawBackIcon();
 }
 void gameControls() {
   switchSound.play();
@@ -392,6 +447,7 @@ void HowToPlay() {
   }
   back.update();
   back.render();
+  drawBackIcon();
 }
 
 void gameCredits() {
@@ -413,6 +469,7 @@ void gameCredits() {
   }
   back.update();
   back.render();
+  drawBackIcon();
 }
 void exitGame() {
   if (savePreviousState == "PLAY" || savePreviousState == "LOSE") {
@@ -441,8 +498,28 @@ void exitGame() {
   rejectExit.render();
 }
 
+void musicController(float bodyXLoc, float bodyYLoc, float bWidth, float bHeight, boolean volumeSwitch) {
+  imageMode(CENTER);
+  if (volumeSwitch == true) {
+    image(musicOn, bodyXLoc, bodyYLoc, bWidth, bHeight);
+  } else if (volumeSwitch == false) {
+    image(musicOff, bodyXLoc, bodyYLoc, bWidth, bHeight);
+  }
+}
 
-void clearBackground() {
+void drawBackIcon() {
+  imageMode(CORNER);
+  image(backImage, back.pos.x + (back.buttonWidth * 0.25) / 2, back.pos.y + (back.buttonHeight * 0.25) / 2, back.buttonWidth * 0.75, back.buttonHeight * 0.75);
+}
+
+void clearBackground() { 
+  if (oldVolumeSwitch == false && volumeSwitch == true) {
+    ingameBkgSound.play();
+    oldVolumeSwitch = true;
+  } else if (oldVolumeSwitch == true && volumeSwitch == false) {
+    ingameBkgSound.pause();
+    oldVolumeSwitch = false;
+  }
   if (cursorCounter == true)
     cursor(HAND);
   else {

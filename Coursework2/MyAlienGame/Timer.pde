@@ -50,10 +50,14 @@ class Timer {
   void show() {
     textAlign(CENTER);
     textSize(35);
-    if(time > 5)
-    fill(255, 255, 0);
-    else
-    fill(255, 0, 0);
+    if (time > 10) {
+      fill(255, 255, 0);
+    } else {
+      if ((int)time % 2 != 0)
+        fill(255, 255, 0);
+      else
+        fill(255, 0, 0);
+    }
     text("Time left:\n" + nf(time, 0, 2) + "s", positionX, positionY);
   }
 }
